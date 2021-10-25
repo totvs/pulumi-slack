@@ -19,7 +19,7 @@ builds:
       - linux
     ldflags:
       - -X github.com/totvs/pulumi-slack/provider/pkg/version.Version={{.Tag}}
-    main: ./cmd/pulumi-slack/
+    main: ./cmd/pulumi-resource-slack/
 changelog:
   skip: true
 release:
