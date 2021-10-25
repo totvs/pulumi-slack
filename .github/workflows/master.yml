@@ -68,8 +68,6 @@ jobs:
           -exec chmod +x {} \;
       - name: Generate SDK
         run: make ${{ matrix.language }}_sdk
-      - name: Check worktree clean
-        run: ./ci-scripts/ci/check-worktree-is-clean
       - run: git status --porcelain
       - name: Compress SDK folder
         run: tar -zcf sdk/${{ matrix.language }}.tar.gz -C sdk/${{ matrix.language }} .
