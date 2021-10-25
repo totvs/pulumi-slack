@@ -1,0 +1,16 @@
+{
+    "name": "@pulumi/slack",
+    "version": "${VERSION}",
+    "scripts": {
+        "build": "tsc"
+    },
+    "dependencies": {
+        "@pulumi/pulumi": "^3.0.0"
+    },
+    "devDependencies": {
+        "typescript": "^4.3.5"
+    },
+    "pulumi": {
+        "resource": true
+    }
+}

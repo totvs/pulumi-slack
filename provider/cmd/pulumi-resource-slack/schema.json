@@ -1,0 +1,168 @@
+{
+    "name": "slack",
+    "description": "A Pulumi provider to create and manage slack resources.",
+    "version": "0.0.1",
+    "resources": {
+        "slack:index:Conversation": {
+            "properties": {
+                "name": {
+                    "type": "string"
+                },
+                "topic": {
+                    "type": "string"
+                },
+                "purpose": {
+                    "type": "string"
+                },
+                "isPrivate": {
+                    "type": "boolean"
+                },
+                "isArchived": {
+                    "type": "boolean"
+                },
+                "members": {
+                    "type": "array",
+                    "items": {
+                        "type": "string"
+                    }
+                },
+                "channel": {
+                    "$ref": "#/types/slack:index:Channel"
+                }
+            },
+            "required": [
+                "name",
+                "channel"
+            ],
+            "inputProperties": {
+                "name": {
+                    "type": "string"
+                },
+                "topic": {
+                    "type": "string"
+                },
+                "purpose": {
+                    "type": "string"
+                },
+                "members": {
+                    "type": "array",
+                    "items": {
+                        "type": "string"
+                    }
+                },
+                "isPrivate": {
+                    "type": "boolean"
+                },
+                "isArchived": {
+                    "type": "boolean"
+                }
+            },
+            "requiredInputs": [
+                "name"
+            ]
+        }
+    },
+    "types": {
+        "slack:index:User": {
+            "properties": {
+                "id": {
+                    "type": "string"
+                },
+                "name": {
+                    "type": "string"
+                },
+                "email": {
+                    "type": "string"
+                }
+            },
+            "type": "object" ,
+            "required": [
+                "id",
+                "name",
+                "email"
+            ]
+        },
+        "slack:index:Channel": {
+            "properties": {
+                "id": {
+                    "type": "string"
+                },
+                "name": {
+                    "type": "string"
+                },
+                "topic": {
+                    "type": "string"
+                },
+                "purpose": {
+                    "type": "string"
+                },
+                "isPrivate": {
+                    "type": "boolean"
+                },
+                "isArchived": {
+                    "type": "boolean"
+                },
+                "members": {
+                    "type": "array",
+                    "items": {
+                        "type": "string"
+                    }
+                }
+            },
+            "type": "object" ,
+            "required": [
+                "id",
+                "name",
+                "isPrivate",
+                "isArchived"
+            ]
+        }
+    },
+    "functions": {
+        "slack:index:LookupUser": {
+            "inputs": {
+                "properties": {
+                    "email": {
+                        "type": "string"
+                    }
+                },
+                "type": "object",
+                "required": [
+                    "email"
+                ]
+            },
+            "outputs": {
+                "properties": {
+                    "user": {
+                        "$ref": "#/types/slack:index:User"
+                    }
+                },
+                "type": "object",
+                "required": [
+                        "user"
+                ]
+            }
+        }
+    },
+    "language": {
+        "csharp": {
+            "packageReferences": {
+                "Pulumi": "3.*"
+            }
+        },
+        "go": {
+            "generateResourceContainerTypes": true,
+            "importBasePath": "github.com/totvs/pulumi-slack/sdk/v3/go/slack"
+        },
+        "nodejs": {
+            "dependencies": {
+                "@pulumi/pulumi": "^3.0.0"
+            }
+        },
+        "python": {
+            "requires": {
+                "pulumi": ">=3.0.0,<4.0.0"
+            }
+        }
+    }
+}

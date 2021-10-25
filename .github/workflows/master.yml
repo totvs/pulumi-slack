@@ -1,0 +1,69 @@
+name: master
+"on":
+  push:
+    branches:
+      - master
+      - "feature-**"
+    paths-ignore:
+      - CHANGELOG.md
+    tags-ignore:
+      - v*
+      - sdk/*
+      - '**'
+env:
+  GO111MODULE: "on"
+  PROVIDER: slack
+  GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+jobs:
+  prerequisites:
+    name: prerequisites
+    runs-on: ubuntu-latest
+    strategy:
+      matrix:
+        goversion: [1.16.x]
+    steps:
+      - name: Checkout Repo
+        uses: actions/checkout@v2
+        with:
+          lfs: true
+      - name: Checkout Scripts Repo
+        uses: actions/checkout@v2
+        with:
+          path: ci-scripts
+          repository: pulumi/scripts
+      - name: Unshallow clone for tags
+        run: git fetch --prune --unshallow --tags
+      - name: Install Go
+        uses: actions/setup-go@v2
+        with:
+          go-version: ${{ matrix.goversion }}
+      - name: Install pulumictl
+        uses: jaxxstorm/action-install-gh-release@v1.1.0
+        with:
+          repo: pulumi/pulumictl
+      - name: Install Pulumi CLI
+        uses: pulumi/action-install-pulumi-cli@v1.0.1
+        with:
+          pulumi-version: 3.0.0-rc.1
+      - name: Build gen binaries
+        run: make gen
+      - name: Build Provider binary
+        run: make provider
+      - name: Create GO SDK
+        run: make go_sdk
+      - name: Create .NET SDK
+        run: make dotnet_sdk
+      - name: Create NODE SDK
+        run: make nodejs_sdk
+      - name: Create PYTHON SDK
+        run: make python_sdk
+      # - name: Check worktree clean
+      #   run: ./ci-scripts/ci/check-worktree-is-clean
+      - run: git status --porcelain
+      - name: Upload artifacts
+        uses: actions/upload-artifact@v2
+        with:
+          name: pulumi-${{ env.PROVIDER }}
+          path: ${{ github.workspace }}/bin
+      - name: Test Provider Library
+        run: make test_provider
