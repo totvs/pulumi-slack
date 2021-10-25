@@ -16,7 +16,7 @@ env:
   GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
 jobs:
   build_sdk:
-    name: prerequisites
+    name: buildSDK
     runs-on: ubuntu-latest
     strategy:
       matrix:
@@ -50,14 +50,9 @@ jobs:
         run: make gen
       - name: Build Provider binary
         run: make provider
-      - name: Create GO SDK
-        run: make go_sdk
-      - name: Create .NET SDK
-        run: make dotnet_sdk
-      - name: Create NODE SDK
-        run: make nodejs_sdk
-      - name: Create PYTHON SDK
-        run: make python_sdk
+      - name: Create SDK
+        with:
+          run: make ${{ matrix.language }}_sdk
       # - name: Check worktree clean
       #   run: ./ci-scripts/ci/check-worktree-is-clean
       - name: Test Provider Library
