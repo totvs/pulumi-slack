@@ -1,0 +1,28 @@
+archives:
+  - id: archive
+    name_template: '{{ .Binary }}-{{ .Tag }}-{{ .Os }}-{{ .Arch }}'
+before:
+  hooks:
+    - make gen
+builds:
+  - binary: pulumi-slack
+    dir: provider
+    env:
+      - CGO_ENABLED=0
+      - GO111MODULE=on
+    goarch:
+      - amd64
+      - arm64
+    goos:
+      - darwin
+      - windows
+      - linux
+    ldflags:
+      - -X github.com/totvs/pulumi-slack/provider/pkg/version.Version={{.Tag}}
+    main: ./cmd/pulumi-slack/
+changelog:
+  skip: true
+release:
+  disable: false
+snapshot:
+  name_template: '{{ .Tag }}-SNAPSHOT'
