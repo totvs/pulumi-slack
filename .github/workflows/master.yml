@@ -15,12 +15,13 @@ env:
   PROVIDER: slack
   GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
 jobs:
-  prerequisites:
+  build_sdk:
     name: prerequisites
     runs-on: ubuntu-latest
     strategy:
       matrix:
         goversion: [1.16.x]
+        language: [ nodejs, python, dotnet, go ]
     steps:
       - name: Checkout Repo
         uses: actions/checkout@v2
@@ -59,11 +60,19 @@ jobs:
         run: make python_sdk
       # - name: Check worktree clean
       #   run: ./ci-scripts/ci/check-worktree-is-clean
-      - run: git status --porcelain
+      - name: Test Provider Library
+        run: make test_provider
+      - name: Compress SDK folder
+        run: tar -zcf sdk/${{ matrix.language }}.tar.gz -C sdk/${{ matrix.language }} .
       - name: Upload artifacts
         uses: actions/upload-artifact@v2
         with:
-          name: pulumi-${{ env.PROVIDER }}
-          path: ${{ github.workspace }}/bin
-      - name: Test Provider Library
-        run: make test_provider
+          name: ${{ matrix.language  }}-sdk.tar.gz
+          path: ${{ github.workspace}}/sdk/${{ matrix.language }}.tar.gz
+      - if: failure() && github.event_name == 'push'
+        name: Notify Slack
+        uses: 8398a7/action-slack@v3
+        with:
+          author_name: Failure in running ${{ matrix.language }} tests
+          fields: repo,commit,author,action
+          status: ${{ job.status }}
