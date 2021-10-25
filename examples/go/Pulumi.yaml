@@ -1,0 +1,3 @@
+name: simple
+runtime: go
+description: A simple slack example

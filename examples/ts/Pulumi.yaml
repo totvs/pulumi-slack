@@ -1,0 +1,5 @@
+name: azdevops
+description: Slack test
+runtime: nodejs
+template:
+  description: A minimal TypeScript Pulumi program
