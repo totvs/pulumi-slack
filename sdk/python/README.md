@@ -70,3 +70,11 @@ $ yarn install
 $ pulumi stack init test
 $ pulumi up
 ```
+
+# Usage
+
+Install Plugin
+
+```bash
+pulumi plugin install resource slack 0.0.1 -f /tmp/pulumi-resource-slack-xxxxx.tar.gz
+```

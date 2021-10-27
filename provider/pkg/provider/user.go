@@ -12,9 +12,9 @@ import (
 )
 
 type User struct {
-	Email string
-	Id    string
-	Name  string
+	Email string `pulumi:"email"`
+	Id    string `pulumi:"id"`
+	Name  string `pulumi:"name"`
 }
 
 type SlackUserFunction struct {
