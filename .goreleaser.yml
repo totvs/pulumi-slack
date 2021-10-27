@@ -5,7 +5,7 @@ before:
   hooks:
     - make gen
 builds:
-  - binary: pulumi-slack
+  - binary: pulumi-resource-slack
     dir: provider
     env:
       - CGO_ENABLED=0

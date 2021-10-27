@@ -15,6 +15,43 @@ env:
   PROVIDER: slack
   GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
 jobs:
+  prerequisites:
+    name: prerequisites
+    runs-on: ubuntu-latest
+    strategy:
+      matrix:
+        goversion: [1.16.x]
+    steps:
+      - name: Checkout Repo
+        uses: actions/checkout@v2
+        with:
+          lfs: true
+      - name: Unshallow clone for tags
+        run: git fetch --prune --unshallow --tags
+      - name: Install Go
+        uses: actions/setup-go@v2
+        with:
+          go-version: ${{ matrix.goversion }}
+      - name: Install pulumictl
+        uses: jaxxstorm/action-install-gh-release@v1.1.0
+        with:
+          repo: pulumi/pulumictl
+      - name: Install Pulumi CLI
+        uses: pulumi/action-install-pulumi-cli@v1.0.1
+        with:
+          pulumi-version: 3.0.0-rc.1
+      - name: Build gen binaries
+        run: make gen
+      - name: Build provider binary
+        run: make provider
+      - run: git status --porcelain
+      - name: Upload artifacts
+        uses: actions/upload-artifact@v2
+        with:
+          name: pulumi-${{ env.PROVIDER }}
+          path: ${{ github.workspace }}/bin
+      - name: Test Provider Library
+        run: make test_provider
   build_sdk:
     name: build_sdks
     runs-on: ubuntu-latest
@@ -75,43 +112,6 @@ jobs:
         with:
           name: ${{ matrix.language  }}-sdk.tar.gz
           path: ${{ github.workspace}}/sdk/${{ matrix.language }}.tar.gz
-  prerequisites:
-    name: prerequisites
-    runs-on: ubuntu-latest
-    strategy:
-      matrix:
-        goversion: [1.16.x]
-    steps:
-      - name: Checkout Repo
-        uses: actions/checkout@v2
-        with:
-          lfs: true
-      - name: Unshallow clone for tags
-        run: git fetch --prune --unshallow --tags
-      - name: Install Go
-        uses: actions/setup-go@v2
-        with:
-          go-version: ${{ matrix.goversion }}
-      - name: Install pulumictl
-        uses: jaxxstorm/action-install-gh-release@v1.1.0
-        with:
-          repo: pulumi/pulumictl
-      - name: Install Pulumi CLI
-        uses: pulumi/action-install-pulumi-cli@v1.0.1
-        with:
-          pulumi-version: 3.0.0-rc.1
-      - name: Build gen binaries
-        run: make gen
-      - name: Build provider binary
-        run: make provider
-      - run: git status --porcelain
-      - name: Upload artifacts
-        uses: actions/upload-artifact@v2
-        with:
-          name: pulumi-${{ env.PROVIDER }}
-          path: ${{ github.workspace }}/bin
-      - name: Test Provider Library
-        run: make test_provider
   publish:
     name: publish
     needs: build_sdk
