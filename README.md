@@ -26,6 +26,8 @@ oauth_config:
       - channels:read
       - im:read
       - mpim:read
+      - users:read
+      - users:read.email
 settings:
   org_deploy_enabled: false
   socket_mode_enabled: false
