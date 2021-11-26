@@ -35,13 +35,14 @@ settings:
 ```
 5. Open menu Oauth & Permissions
 6. Click on Install to Workspace and allow requested permissions
-7. Copy the bot user oauth token to be used by provider
+7. Go to menu Features/Oauth & Permissions
+8. Copy the bot user oauth token to be used by this provider
 
 ## Other tips
 If you are facing problems to manage channel members, even if you add permission scopes to the bot user, check the channel management.
 
 https://YOUR-WORKSPACE-HERE.slack.com/admin/settings#channel_management_restrictions
- 
+
 ## Environment
 You need to set Slack token with:
 

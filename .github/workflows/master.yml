@@ -6,6 +6,7 @@ name: master
       - "feature-**"
     paths-ignore:
       - CHANGELOG.md
+      - README.md
     tags-ignore:
       - v*
       - sdk/*
