@@ -1,3 +1,9 @@
+# What this provider can do?
+- Channels: can create public, private, add description, purpose, etc...
+- User: bind existenting user to a channel
+
+> A channel cannot be deleted, this provider rename and archive the channel.
+
 # Permissions
 We need to configure some scopes to manage resources (Bot tokens):
 
@@ -53,6 +59,13 @@ or
 ```sh
 pulumi config set --secret slack:config:token xoxb-2271973586641-3369578963123-hngThgT5dq4W7vmHdzd91T3H
 ```
+# Installation
+
+You can download the latest provider from releases and install with:
+
+```bash
+pulumi plugin install resource slack 0.0.5 -f /tmp/pulumi-resource-slack-v0.0.5-alpha.1636395768+d62d844a-linux-amd64.tar.gz
+```
 
 ## Pre-requisites to develop
 
@@ -72,12 +85,4 @@ $ yarn link @pulumi/slack
 $ yarn install
 $ pulumi stack init test
 $ pulumi up
-```
-
-# Usage
-
-Install Plugin
-
-```bash
-pulumi plugin install resource slack 0.0.1 -f /tmp/pulumi-resource-slack-xxxxx.tar.gz
 ```
